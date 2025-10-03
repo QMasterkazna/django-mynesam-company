@@ -27,8 +27,8 @@ db.sqlite3-journal
 .DS_Store
 Thumbs.db
 
+# Ненужные батники
 .bat
 *.bat
 
-.txt
-*.txt
+
