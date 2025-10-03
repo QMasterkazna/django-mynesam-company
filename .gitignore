@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Виртуальное окружение
+venv/
+.venv/
+env/
+ENV/
+
+# Локальные настройки Django
+local_settings.py
+*.env
+.env.local
+.env.*.local
+
+# Сгенерированные файлы Django
+*.sqlite3  # Локальная БД
+*.log      # Логи сервера
+
+# Секретные данные
+SECRET_KEY  # Если хранится отдельно
+db.sqlite3-journal
+
+# macOS/Windows
+.DS_Store
+Thumbs.db
+
+.bat
+*.bat
+
+.txt
+*.txt

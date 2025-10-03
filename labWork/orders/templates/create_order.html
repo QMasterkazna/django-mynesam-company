@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Мой не сам! - Заявки{% endblock title %}
+
+{% block content %}
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">Мой Не Сам</a>
+        <div class="d-flex">
+            <span class="navbar-text me-3">Привет, {{ user.username }}!</span>
+            <a class="btn btn-outline-light" href="{% url 'logout' %}">Выйти</a>
+        </div>
+    </div>
+</nav>
+<!-- Сообщения -->
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show mx-3 mt-3" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Форма создания заявки -->
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-body p-4">
+                    <h4 class="mb-4 text-center">Новая заявка</h4>
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-3">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger small">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-success w-100">Создать заявку</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- История заявок -->
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-body p-4">
+                    <h4 class="mb-4 text-center">История заявок</h4>
+                    {% if orders %}
+                        <ul class="list-group">
+                            {% for order in orders %}
+                                <li class="list-group-item">
+                                    <strong>{{ order.get_service_type_display }}</strong> — {{ order.address }} <br>
+                                    {{ order.preferred_datetime|date:"d.m.Y H:i" }} — Статус: {{ order.get_status_display }}
+                                    <span class="badge 
+                                        {% if order.status == 'new' %}bg-primary
+                                        {% elif order.status == 'in_progress' %}bg-warning text-dark
+                                        {% elif order.status == 'done' %}bg-success
+                                        {% elif order.status == 'canceled' %}bg-danger
+                                        {% endif %}">
+                                        {{ order.get_status_display }}  
+                                    </span>
+                                    {% if order.status == 'cancelled' and order.cancel_reason %}
+                                        <div class="mt-2 p-2 bg-light border border-danger rounded">
+                                            <strong>Причина отмены:</strong> {{ order.cancel_reason }}
+                                        </div>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-center">История заявок пуста.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

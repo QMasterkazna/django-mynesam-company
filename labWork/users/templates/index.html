@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Мой не сам! - Главная{% endblock title %}
+
+{% block content %}
+
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="#">Мой Не Сам</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#about">О нас</a></li>
+        <li class="nav-item"><a class="nav-link" href="#services">Услуги</a></li>
+        {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url "create_order" %}">Мои заявки</a></li>
+            <span class="navbar-text me-3">Привет, {{ user.username }}!</span>
+            <a class="btn btn-outline-light" href="{% url 'logout' %}">Выйти</a>
+        {% else %}
+            <a class="btn btn-outline-light me-2" href="{% url 'login' %}">Войти</a>
+            <a class="btn btn-light" href="{% url 'register' %}">Регистрация</a>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- Блок сообщений -->
+{% if messages %}
+  {% for message in messages %}
+      <div class="alert 
+                  alert-{{ message.tags|default:'info' }} 
+                  alert-dismissible fade show mt-3" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+  {% endfor %}
+{% endif %}
+<!-- Герой-секция -->
+<div class="bg-primary text-white text-center py-5 mb-5">
+  <div class="container">
+    <h1 class="display-4">Чистота без забот</h1>
+    <p class="lead">Мы делаем ваш дом и офис сияющими!</p>
+    <a href="{% url "create_order" %}" class="btn btn-success btn-lg mt-3">Оставить заявку</a>
+  </div>
+</div>
+
+<!-- О нас -->
+<section id="about" class="container py-5">
+  <h2 class="text-center mb-4">О компании</h2>
+  <p class="text-center mx-auto" style="max-width:700px;">
+    «Мой Не Сам» — профессиональная клининговая компания, предоставляющая широкий спектр услуг по уборке
+    жилых и производственных помещений. Мы ценим ваше время и гарантируем качество!
+  </p>
+</section>
+
+<!-- Услуги -->
+<section id="services" class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Наши услуги</h2>
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <h5 class="card-title">Общий клининг</h5>
+            <p class="card-text">Ежедневная уборка помещений для поддержания чистоты.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <h5 class="card-title">Генеральная уборка</h5>
+            <p class="card-text">Тщательная уборка всего дома или офиса.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <h5 class="card-title">Послестроительная уборка</h5>
+            <p class="card-text">Удаление строительного мусора и пыли после ремонта.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 text-center">
+          <div class="card-body">
+            <h5 class="card-title">Химчистка ковров и мебели</h5>
+            <p class="card-text">Профессиональная очистка ковров, мягкой мебели и текстиля.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
